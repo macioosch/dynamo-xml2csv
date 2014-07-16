@@ -2,6 +2,7 @@
 import os.path
 import xml.etree.ElementTree as etree
 from argparse import ArgumentParser
+from bz2 import BZ2File
 from sys import stdout
 
 parser = ArgumentParser(description='Extract parameters from .xml or .xml.bz2 files, output as csv.')
@@ -14,7 +15,7 @@ args = parser.parse_args()
 for fileName in args.files:
     tree = None
     if fileName[-4:] == ".bz2":
-        tree = etree.parse(bz2.BZ2File(fileName))
+        tree = etree.parse(BZ2File(fileName))
     else:
         tree = etree.parse(fileName)
 

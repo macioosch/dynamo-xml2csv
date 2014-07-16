@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-import argparse
-import glob
-import sys
 import os.path
 import xml.etree.ElementTree as etree
+from argparse import ArgumentParser
+from sys import stdout
 
-parser = argparse.ArgumentParser(description='Extract parameters from .xml or .xml.bz2 files, output as csv.')
+parser = ArgumentParser(description='Extract parameters from .xml or .xml.bz2 files, output as csv.')
 
 parser.add_argument('keys', nargs=1, help='keys to read, separated with commas')
 parser.add_argument('files', metavar='file', nargs='+', help='input files')
@@ -20,6 +19,6 @@ for fileName in args.files:
         tree = etree.parse(fileName)
 
     for keyPath in args.keys[0].split(','):
-        sys.stdout.write(tree.find(keyPath).items()[0][1] + "\t")
+        stdout.write(tree.find(keyPath).items()[0][1] + "\t")
 
     print()

@@ -1,24 +1,25 @@
 #!/usr/bin/env python
+import argparse
 import glob
 import sys
 import os.path
 import xml.etree.ElementTree as etree
 
-usageString = "\tUsage: dynamo-xml2csv KEY [KEY]... FILE\n\tAccepts .xml and .xml.bz2 files."
+parser = argparse.ArgumentParser(description='Extract parameters from .xml or .xml.bz2 files, output as csv.')
 
-if len(sys.argv) < 3:
-    sys.exit("ERROR: Too few arguments!\n" + usageString)
+parser.add_argument('keys', nargs=1, help='keys to read, separated with commas')
+parser.add_argument('files', metavar='file', nargs='+', help='input files')
 
-fileName = sys.argv[-1]
-if not os.path.isfile(fileName):
-    sys.exit("ERROR: Can't open file \"" + fileName + "\"!\n" + usageString)
-tree = None
-if fileName[-4:] == ".bz2":
-    tree = etree.parse(bz2.BZ2File(fileName))
-else:
-    tree = etree.parse(fileName)
+args = parser.parse_args()
 
-for keyPath in sys.argv[1:-1]:
-    sys.stdout.write(tree.find(keyPath).items()[0][1] + "\t")
+for fileName in args.files:
+    tree = None
+    if fileName[-4:] == ".bz2":
+        tree = etree.parse(bz2.BZ2File(fileName))
+    else:
+        tree = etree.parse(fileName)
 
-print()
+    for keyPath in args.keys[0].split(','):
+        sys.stdout.write(tree.find(keyPath).items()[0][1] + "\t")
+
+    print()
